@@ -1,0 +1,25 @@
+# Use the official Node.js image as the base image
+FROM node:14
+
+# Set non-interactive mode
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Update package sources and install necessary tools
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a directory for your Node.js application
+WORKDIR /usr/src/app
+
+# Copy your Node.js application files into the container
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+# Expose the port your Node.js app runs on
+EXPOSE 3000
+
+# Define the command to run your Node.js application
+CMD ["node", "index.js"]
+
